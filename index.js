@@ -3,15 +3,21 @@
  * Check if this module is loaded as part of Electro
  * or as a standalone module, like `const Cycle = require('q-cycle')`
  */
-if (!config || typeof config.getLogger !== 'function') {
+if (!global.config || typeof global.config.getLogger !== 'function') {
   var log = {
     debug: console.log.bind(console),
     info: console.log.bind(console),
-    err: console.err.bind(console),
+    error: console.error.bind(console),
   }
 } else
   log = config.getLogger('modules/cycle')
 
+if (!global.H)
+  global.H = { now: () => new Date().getTime() }
+
+/**
+ * we're okay now, let's start actual work
+ */
 const
   Promise = require('bluebird'),
   math = require('mathjs'),
